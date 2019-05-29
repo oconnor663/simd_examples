@@ -7,7 +7,7 @@ pub fn sum_portable(nums: &[u64]) -> u64 {
 }
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-#[inline(always)]
+#[target_feature(enable = "avx2")]
 unsafe fn sum_avx2(nums: &[u64]) -> u64 {
     #[cfg(target_arch = "x86")]
     use std::arch::x86::*;
@@ -37,11 +37,10 @@ unsafe fn sum_avx2(nums: &[u64]) -> u64 {
 
 pub fn sum_avx2_static(nums: &[u64]) -> u64 {
     #[cfg(target_feature = "avx2")]
-    {
-        unsafe {
-            return sum_avx2(nums);
-        }
+    unsafe {
+        return sum_avx2(nums);
     }
+    #[allow(unreachable_code)]
     sum_portable(nums)
 }
 
