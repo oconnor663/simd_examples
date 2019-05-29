@@ -22,6 +22,7 @@ unsafe fn sum_avx2(nums: &[u64]) -> u64 {
         // https://godbolt.org/z/bS6uXv
         let ptr = nums.as_ptr().add(i) as *const __m256i;
         // Note: This is an unaligned load.
+        // https://pzemtsov.github.io/2016/11/06/bug-story-alignment-on-x86.html
         let loaded_vec = _mm256_loadu_si256(ptr);
         sums_vec = _mm256_add_epi64(sums_vec, loaded_vec);
         i += 4;
