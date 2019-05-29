@@ -40,6 +40,7 @@ unsafe fn sum_avx2(nums: &[u64]) -> u64 {
 }
 
 pub fn sum_avx2_static(nums: &[u64]) -> u64 {
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     #[cfg(target_feature = "avx2")]
     unsafe {
         return sum_avx2(nums);
