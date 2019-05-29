@@ -34,7 +34,7 @@ unsafe fn sum_avx2(nums: &[u64]) -> u64 {
         .wrapping_add(sums_array[3]);
     while i < nums.len() {
         sum = sum.wrapping_add(nums[i]);
-        i += 1
+        i += 1;
     }
     sum
 }
