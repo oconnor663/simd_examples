@@ -4,9 +4,12 @@ extern crate test;
 
 use simd_examples::*;
 
-fn million_random_ints() -> Vec<u64> {
-    let mut v = Vec::with_capacity(1_000_000);
-    for _ in 0..v.capacity() {
+// Manually chosen to make AVX2 look good :)
+const INPUT_LEN: usize = 10_000;
+
+fn random_ints() -> Vec<u64> {
+    let mut v = Vec::with_capacity(INPUT_LEN);
+    for _ in 0..INPUT_LEN {
         v.push(rand::random());
     }
     v
@@ -14,18 +17,18 @@ fn million_random_ints() -> Vec<u64> {
 
 #[bench]
 fn bench_portable(b: &mut test::Bencher) {
-    let ints = million_random_ints();
+    let ints = random_ints();
     b.iter(|| sum_portable(&ints));
 }
 
 #[bench]
 fn bench_static(b: &mut test::Bencher) {
-    let ints = million_random_ints();
+    let ints = random_ints();
     b.iter(|| sum_avx2_static(&ints));
 }
 
 #[bench]
 fn bench_dynamic(b: &mut test::Bencher) {
-    let ints = million_random_ints();
+    let ints = random_ints();
     b.iter(|| sum_avx2_dynamic(&ints));
 }
