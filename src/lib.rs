@@ -18,7 +18,9 @@ unsafe fn sum_avx2(nums: &[u64]) -> u64 {
     let mut sums_vec = _mm256_set1_epi64x(0i64);
     let batch_end = nums.len() - (nums.len() % 4);
     while i < batch_end {
+        // Note: Paying a bounds check here would be terrible for performance.
         let ptr = nums.as_ptr().add(i) as *const __m256i;
+        // Note: This is an unaligned load.
         let loaded_vec = _mm256_loadu_si256(ptr);
         sums_vec = _mm256_add_epi64(sums_vec, loaded_vec);
         i += 4;
